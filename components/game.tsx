@@ -5,7 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Answer } from "@/lib/type";
 import useLocalStorage from "@/lib/useLocalStorage";
 import { useEffect, useState } from "react";
-import { DialogDemo } from "./dialog";
+import { DialogIntro } from "./dialog-intro";
+import { DialogComplete } from "./dialog-complete";
 
 const lastPlayedDateKey = "lastPlayedDate"
 
@@ -16,9 +17,18 @@ export default function Game({question, defaultAnswers}: {question: string, defa
   const [answers, setAnswers] = useLocalStorage("answers", defaultAnswers)
   const [wrongAnimation, setPlayWrongAnimation] = useState(false)
   const [showDialog, setShowDialog] = useState(false)
+  const [showCompleteDialog, setShowCompleteDialog] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [input, setInput] = useState("")
 
   const winner = answers.filter(answer => answer.revealed).length === 5
   const loser = !guessCount
+
+  useEffect(() => {
+    if (winner || loser) {
+      setShowCompleteDialog(true)
+    }
+  }, [winner, loser, setShowCompleteDialog])
 
   useEffect(() => {
     const lastPlayed = window.localStorage.getItem(lastPlayedDateKey);
@@ -30,6 +40,7 @@ export default function Game({question, defaultAnswers}: {question: string, defa
       setAnswers(answers)
       window.localStorage.setItem(lastPlayedDateKey, new Date().toDateString())
     }
+    setIsLoading(false)
   }, [setGuessCount, setAnswers, answers]);
 
   useEffect(() => {
@@ -41,38 +52,48 @@ export default function Game({question, defaultAnswers}: {question: string, defa
   return (
     <>
       {
-        showDialog && <DialogDemo open={showDialog} close={() => setShowDialog(false)}/>
+        (winner || loser) && showCompleteDialog && <DialogComplete isWinner={winner} answers={answers} open={true} close={() => setShowCompleteDialog(false)}/>
       }
-      <div>{guessCount ? winner ? "You win! Play Again tomorrow!" : question : "Try Again Tomorrow!"}</div>
-      <Input disabled={loser || winner} onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            // @ts-ignore
-            const inputText: string = e.target.value
-
-            const cleanedInputText = inputText.trim().toLowerCase()
-
-            const answersObject: {[key: string]: Answer} = {}
-            answers.forEach((answer, i) => answersObject[answer.word] = {...answer})
-            const answer = answersObject[cleanedInputText]
-
-            if (!answer) {
-              setGuessCount(guessCount - 1)
-              setPlayWrongAnimation(true)
-            } else {
-              const clone = [...answers]
-              clone[answer.position] = {revealed: true, ...answer}
-              setAnswers(clone)
+      {
+        showDialog && <DialogIntro open={showDialog} close={() => setShowDialog(false)}/>
+      }
+      {
+        isLoading ?
+        <div>Loading...</div> :
+        <><div>Daily Logits</div>
+        <div>{guessCount ? winner ? "You win! Play Again tomorrow!" : question : "Try Again Tomorrow!"}</div>
+        <Input value={input} disabled={loser || winner} onChange={(e) => setInput(e.target.value.replace(/[^a-zA-Z]/g, ''))} onKeyDown={(e) => {
+            if (e.key === 'Enter' && input) {
+              // @ts-ignore
+              const inputText: string = e.target.value
+  
+              const cleanedInputText = inputText.trim().toLowerCase()
+  
+              const answersObject: {[key: string]: Answer} = {}
+              answers.forEach((answer, i) => answersObject[answer.word] = {...answer})
+              const answer = answersObject[cleanedInputText]
+  
+              if (!answer) {
+                setGuessCount(guessCount - 1)
+                setPlayWrongAnimation(true)
+              } else {
+                const clone = [...answers]
+                clone[answer.position] = {revealed: true, ...answer}
+                setAnswers(clone)
+              }
             }
+        }} className={`sm:w-1/5 ${wrongAnimation ? "animate-horizontal-shaking" : ""}`} placeholder={"Enter your guess here!"}></Input>
+        <div className="flex flex-row gap-3">
+          Misses:
+          {
+            Array.from(Array(defaultNumGuesses)).map((_, i) => <div className={`${i >= guessCount ? "animate-shrink fill-mode-forwards" : ""}`} key={i}>O</div>)
           }
-      }} className={`w-1/5 ${wrongAnimation ? "animate-horizontal-shaking" : ""}`} placeholder={"Enter your guess here!"}></Input>
-      <div className="flex flex-row gap-3">
-        Misses:
-        {
-          Array.from(Array(defaultNumGuesses)).map((_, i) => <div className={`${i >= guessCount ? "animate-shrink fill-mode-forwards" : ""}`} key={i}>O</div>)
-        }
-      </div>
-      <Answers answers={answers} hasLost={loser} />
+        </div>
+        <Answers answers={answers} hasLost={loser} />
+      </>
+      }
     </>
+      
   );
 }
 

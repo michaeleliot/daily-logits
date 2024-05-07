@@ -104,6 +104,7 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
         "flip": "flip 500ms ease forwards",
         "horizontal-shaking": "horizontal-shaking 200ms",
+        "vertical-shaking": "vertical-shaking 200ms",
         "shrink": "shrink 200ms",
       },
     },

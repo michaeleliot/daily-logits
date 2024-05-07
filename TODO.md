@@ -5,16 +5,17 @@
 
 ~~* Ability to generate new each day~~
 
-* Better animations on the misses (miss pops + input shakes)
-* Wait for localstorage to load before displaying
-* Shareable Emoji Thing
-* Mobile device support, variable width support
+~~* Better animations on the misses (miss pops + input shakes)~~
+~~* Wait for localstorage to load before displaying~~
+~~* Shareable Emoji Thing~~
+~~* Mobile device support, variable width support~~
 
-* Think on how to make question less vague (maybe just include that in explanation)
-* Make clearer that it's only one word (add input restriction as well)
-* Explainer for the technology behind it + place to find me
+~~* Think on how to make question less vague (maybe just include that in explanation)~~
+~~* Make clearer that it's only one word (add input restriction as well)~~
+~~* Explainer for the technology behind it + place to find me~~
+* User can only guess one word
 
 * Think on how to make easier (reveal letters with each miss, allow for close words (survive vs survival vs safety))
-* 
+* Clean up misses section
 * Automate generating new sentence + answers each day
 

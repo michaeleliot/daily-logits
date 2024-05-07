@@ -61,7 +61,7 @@ function replaceMaskWithUnderscores(questionWithMask: string) {
 
 //   const answers: Answer[] = outputs.map((output, i) => ({
 //     word: output.token_str,
-//     logit: output.score,
+//     logit: +output.score.toFixed(3),
 //     position: i
 //   }))
 
