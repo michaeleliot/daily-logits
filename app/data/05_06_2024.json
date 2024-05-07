@@ -1,0 +1,30 @@
+{
+  "question": "the goal of life is _____",
+  "answers": [
+    {
+      "word": "survival",
+      "logit": 0.06,
+      "position": 0
+    },
+    {
+      "word": "love",
+      "logit": 0.04,
+      "position": 1
+    },
+    {
+      "word": "meaning",
+      "logit": 0.033,
+      "position": 2
+    },
+    {
+      "word": "praise",
+      "logit": 0.019,
+      "position": 3
+    },
+    {
+      "word": "comfort",
+      "logit": 0.019,
+      "position": 4
+    }
+  ]
+}
