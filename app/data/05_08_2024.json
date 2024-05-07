@@ -1,0 +1,1 @@
+{"question":"The _____ flew gracefully through the sky.","answers":[{"word":"plane","logit":0.074,"position":0},{"word":"helicopter","logit":0.063,"position":1},{"word":"bird","logit":0.046,"position":2},{"word":"dragon","logit":0.039,"position":3},{"word":"eagle","logit":0.032,"position":4}]}

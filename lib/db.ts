@@ -1,6 +1,5 @@
 import { promises as fs } from 'fs';
 import { Answer } from './type';
-// import { Queue } from "quirrel/next-app"
 // import { pipeline } from '@xenova/transformers';
 
 import Replicate from "replicate";
@@ -58,7 +57,6 @@ function replaceMaskWithUnderscores(questionWithMask: string) {
   
 //   const unmasker = await pipeline('fill-mask', 'Xenova/bert-base-cased');
 //   const outputs = await unmasker(questionWithMask) as TransformersFillMaskOutput[];
-
 //   const answers: Answer[] = outputs.map((output, i) => ({
 //     word: output.token_str,
 //     logit: +output.score.toFixed(3),
@@ -72,7 +70,7 @@ function replaceMaskWithUnderscores(questionWithMask: string) {
 //     answers
 //   })
 
-//   fs.writeFile(process.cwd() + `/app/data/${formattedDate}.json`, data)
+//   fs.writeFile(process.cwd() + `/../app/data/${formattedDate}.json`, data, {mode: 0o755})
 // }
 
-// createGameDataForTomorrow("The [MASK] was a sight to behold in the evening.")
+// createGameDataForTomorrow("The [MASK] flew gracefully through the sky.")

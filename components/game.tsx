@@ -26,7 +26,7 @@ export default function Game({question, defaultAnswers}: {question: string, defa
 
   useEffect(() => {
     if (winner || loser) {
-      setShowCompleteDialog(true)
+      setTimeout(() => setShowCompleteDialog(true), 1500)
     }
   }, [winner, loser, setShowCompleteDialog])
 
@@ -61,7 +61,8 @@ export default function Game({question, defaultAnswers}: {question: string, defa
         isLoading ?
         <div>Loading...</div> :
         <><div>Daily Logits</div>
-        <div>{guessCount ? winner ? "You win! Play Again tomorrow!" : question : "Try Again Tomorrow!"}</div>
+        {winner ? <div>You win! Play Again tomorrow!</div> : loser ? <div>Try Again Tomorrow!</div> : <></>}
+        <div>{question}</div>
         <Input value={input} disabled={loser || winner} onChange={(e) => setInput(e.target.value.replace(/[^a-zA-Z]/g, ''))} onKeyDown={(e) => {
             if (e.key === 'Enter' && input) {
               // @ts-ignore
