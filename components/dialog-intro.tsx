@@ -13,7 +13,7 @@ import {
 export function DialogIntro({open, close}: {open: boolean, close: () => void}) {
   return (
     <Dialog open={open}>
-      <DialogContent closeFn={close} className="wsm:max-w-[425px]">
+      <DialogContent closeFn={close} className="w-11/12 wsm:max-w-[425px]">
         <div className="bolder text-3xl">
           How To Play
         </div>

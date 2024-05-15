@@ -17,7 +17,7 @@ export function DialogComplete({open, close, isWinner, answers}: {open: boolean,
   const [isCopied, setIsCopied] = useState(false)
   return (
     <Dialog open={open}>
-      <DialogContent closeFn={close} className="flex flex-col items-center sm:max-w-[425px]">
+      <DialogContent closeFn={close} className="flex flex-col items-center w-3/4 sm:max-w-[425px]">
         <div>
           {isWinner ? "Good Job!" : "Better luck tomorrow!"}
         </div>
