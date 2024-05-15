@@ -110,7 +110,8 @@ export default function Game({question, defaultAnswers}: {question: string, defa
             }
 
             setInput("")
-            inputRef.current.focus()
+            const isMobile = window.innerWidth < 640;
+            if (!isMobile) inputRef.current.focus()
           }
         }} className={`sm:w-1/5 ${wrongAnimation ? "animate-horizontal-shaking" : ""}`}></Input>
         <div className="flex flex-row gap-3">

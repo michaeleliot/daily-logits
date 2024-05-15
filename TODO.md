@@ -33,6 +33,7 @@
 * OPTIONAL: reveal letters with each miss
 * OPTIONAL: Allow for close words to count (survive vs survival vs safety)
 * OPTIONAL: Add different models
+* OPTIONAL: Create an animation for the tutorial
 * OPTIOANL: Cleanup animations further
 
 * Promotion

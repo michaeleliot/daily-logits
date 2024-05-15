@@ -1,7 +1,7 @@
-import { Answer } from "@/lib/type";
+import { Answer as AnswerType } from "@/lib/type";
 import { useEffect, useState } from "react";
 
-export default function Answers({answers}: {answers: Answer[]}) {
+export default function Answers({answers}: {answers: AnswerType[]}) {
   return (
     <div className="flex flex-col gap-5 mt-3 w-full items-center">
       {answers.map((answer, i) => 
@@ -11,7 +11,7 @@ export default function Answers({answers}: {answers: Answer[]}) {
   );
 }
 
-function Answer({answer}: {answer: Answer}) {
+function Answer({answer}: {answer: AnswerType}) {
   const [showAnimation, setShowAnimation] = useState(answer.revealed)
   if (answer.failReveal) {
     setTimeout(() => setShowAnimation(true), 400 * answer.failReveal)
