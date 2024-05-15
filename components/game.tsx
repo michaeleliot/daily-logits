@@ -22,12 +22,20 @@ export default function Game({question, defaultAnswers}: {question: string, defa
   const [input, setInput] = useState("")
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const winner = answers.filter(answer => answer.revealed).length === 5
   const loser = !guessCount
+  const winner = answers.filter(answer => answer.revealed).length === 5 && !loser
 
   useEffect(() => {
     if (winner || loser) {
-      setTimeout(() => setShowCompleteDialog(true), 1500)
+      let failures = 0
+      const answersWithFailures: Answer[] = answers.map(answer => {
+        if (!answer.revealed) {
+          return {...answer, failReveal: ++failures}
+        }
+        return answer
+      })
+      setAnswers(answersWithFailures)
+      setTimeout(() => setShowCompleteDialog(true), 3000)
     }
   }, [winner, loser, setShowCompleteDialog])
 
@@ -53,10 +61,6 @@ export default function Game({question, defaultAnswers}: {question: string, defa
     }
   }, [wrongAnimation])
 
-  const submit = useCallback(() => {
-    
-  }, [])
-
   return (
     <div className="w-full h-full flex flex-col gap-4 items-center">
       {
@@ -68,9 +72,17 @@ export default function Game({question, defaultAnswers}: {question: string, defa
       {
         isLoading ?
         <div>Loading...</div> :
-        <><div>Daily Logits</div>
+        <><div className="flex flex-row items-center gap-2">
+          <div>
+            Daily Logits
+          </div>
+          <button onClick={() => setShowDialog(true)} className="flex items-center justify-center h-3 w-3 outline outline-1 outline-slate-400 text-slate-400 rounded-full text-xs">
+            ?
+          </button>
+        </div>
         <div>{question}</div>
         <Input ref={inputRef} value={input} disabled={loser || winner} onChange={(e) => setInput(e.target.value.replace(/[^a-zA-Z]/g, ''))} onKeyDown={(e) => {
+          //@ts-ignore
           const inputText = e.target.value
           if (e.key === 'Enter' && inputText && inputRef.current) {
             inputRef.current.blur()
@@ -98,51 +110,15 @@ export default function Game({question, defaultAnswers}: {question: string, defa
             }
 
             setInput("")
+            inputRef.current.focus()
           }
         }} className={`sm:w-1/5 ${wrongAnimation ? "animate-horizontal-shaking" : ""}`}></Input>
         <div className="flex flex-row gap-3">
-          Misses:
           {
             Array.from(Array(defaultNumGuesses)).map((_, i) => <div className={`${i >= guessCount ? "animate-shrink fill-mode-forwards" : ""}`} key={i}>O</div>)
           }
         </div>
-        <Answers answers={answers} hasLost={loser} />
-        {/* <div className="h-80 px-10 w-full flex flex-col mt-5 items-center">
-          <div className="flex justify-between items-center mb-4 gap-1">
-            {["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"].map((key) => (
-              <button disabled={winner || loser} onClick={() => {
-                console.log("didn't click")
-                setInput(input => input + key)
-                }} key={key} className="bg-gray-500 text-white font-bold text-lg min-w-8 py-2 px-2 rounded-md hover:bg-gray-600 focus:outline-none">
-                {key}
-              </button>
-            ))}
-          </div>
-          <div className="flex justify-between items-center mb-4 gap-1">
-            {["A", "S", "D", "F", "G", "H", "J", "K", "L"].map((key) => (
-              <button disabled={winner || loser} onClick={() => setInput(input => input + key)} key={key} className="bg-gray-500 text-white font-bold text-lg min-w-8 py-2 px-2 rounded-md hover:bg-gray-600 focus:outline-none">
-              {key}
-            </button>
-            ))}
-          </div>
-          <div className="flex justify-between items-center gap-1">
-            {["enter", "Z", "X", "C", "V", "B", "N", "M", "<="].map(
-              (key) => (
-              <button disabled={winner || loser} onClick={() => {
-                if (key == "enter") {
-                  submit()
-                } else if (key == "<=") {
-                  setInput(input =>input.slice(0,-1))
-                } else {
-                  setInput(input => input + key)
-                }
-                }} key={key} className="bg-gray-500 text-white font-bold text-lg min-w-8 py-2 px-2 rounded-md hover:bg-gray-600 focus:outline-none">
-                {key}
-              </button>
-              )
-            )}
-          </div>
-        </div> */}
+        <Answers answers={answers} />
       </>
       }
     </div>

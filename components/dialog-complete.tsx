@@ -13,7 +13,7 @@ import { Answer } from "@/lib/type"
 import { useState } from "react"
 
 export function DialogComplete({open, close, isWinner, answers}: {open: boolean, close: () => void, isWinner: boolean, answers: Answer[]}) {
-  const emojiString = answers.map(answer => answer.revealed ? "🧠" : "🤖").join(" ")
+  const emojiString = answers.map(answer => !answer.failReveal ? "🧠" : "🤖").join(" ")
   const [isCopied, setIsCopied] = useState(false)
   return (
     <Dialog open={open}>

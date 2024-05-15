@@ -22,20 +22,18 @@
 ~~* Throw out similar words (survive vs survives vs surviving)~~
 
 
-* Clean up misses section, show missed words on the right
-* Delay animation for each answer reveal on lose
+~~* Delay animation for each answer reveal on lose~~
+~~* Ability to reopen dialog~~
+~~* See model that guessed~~
+~~* Add the wordle keyboard~~
 * Better colors? Dark mode? Ding on success
-* Ability to reopen dialog
-* See model that guessed
-* Add the wordle keyboard
   
-* Figure out a way to go infinite (or nearly so)
+* Figure out a way to have the game automatically generate near indefinitely
 
 * OPTIONAL: reveal letters with each miss
 * OPTIONAL: Allow for close words to count (survive vs survival vs safety)
 * OPTIONAL: Add different models
-
-* General refactoring
+* OPTIOANL: Cleanup animations further
 
 * Promotion
   * Hacker news

@@ -25,16 +25,15 @@ export function DialogIntro({open, close}: {open: boolean, close: () => void}) {
           <li className="list-disc">You have three incorrect answers before game over</li>
           <li className="list-disc">Guess the 5 likeliest answers to win!</li>
           <li className="list-disc">Answers will show in order of logit, or likelihood score. Higher number = AI thinks more likely</li>
-        </ul> 
+        </ul>
         <div>
           <div className="bolder text-xl">Example</div>
           <div>The meaning of life is ___</div>
           <div>AI Answers: Survival, Love, Purpose</div>
         </div>
         <div className="text-xs text-slate-500">
-          A daily game by <a target="_blank" className="underline" href="https://twitter.com/MichaelEliot">Michael Eliot</a>
+          A daily game by <a target="_blank" className="underline" href="https://twitter.com/MichaelEliot">Michael Eliot</a>, answers by bert-base-cased
         </div>
-        
         <DialogFooter>
           <DialogClose asChild>
             <Button onClick={close} type="button" variant="secondary">
