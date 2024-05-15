@@ -54,32 +54,7 @@ export default function Game({question, defaultAnswers}: {question: string, defa
   }, [wrongAnimation])
 
   const submit = useCallback(() => {
-    if (input ) {
-      // inputRef.current.blur()
-
-      const cleanedInputText = input.trim().toLowerCase()
-      
-      const lemmatize = require( 'wink-lemmatizer' );
-
-      const answersObject: {[key: string]: Answer} = {}
-      answers.forEach((answer, i) => {
-        answersObject[answer.word] = {...answer}
-        answersObject[lemmatize.adjective(answer.word)] = {...answer}
-        answersObject[lemmatize.noun(answer.word)] = {...answer}
-        answersObject[lemmatize.verb(answer.word)] = {...answer}
-      })
-
-      const answer = answersObject[cleanedInputText] || answersObject[lemmatize.adjective(cleanedInputText)] || answersObject[lemmatize.verb(cleanedInputText)] || answersObject[lemmatize.noun(cleanedInputText)] 
-
-      if (!answer) {
-        setGuessCount(guessCount - 1)
-        setPlayWrongAnimation(true)
-      } else {
-        const clone = [...answers]
-        clone[answer.position] = {revealed: true, ...answer}
-        setAnswers(clone)
-      }
-    }
+    
   }, [])
 
   return (
@@ -96,8 +71,34 @@ export default function Game({question, defaultAnswers}: {question: string, defa
         <><div>Daily Logits</div>
         <div>{question}</div>
         <Input ref={inputRef} value={input} disabled={loser || winner} onChange={(e) => setInput(e.target.value.replace(/[^a-zA-Z]/g, ''))} onKeyDown={(e) => {
-          console.log(e.key)
-          if (e.key === 'Enter' || e.key === "return") submit()
+          const inputText = e.target.value
+          if (e.key === 'Enter' && inputText && inputRef.current) {
+            inputRef.current.blur()
+            const cleanedInputText = inputText.trim().toLowerCase()
+            
+            const lemmatize = require( 'wink-lemmatizer' );
+      
+            const answersObject: {[key: string]: Answer} = {}
+            answers.forEach((answer, i) => {
+              answersObject[answer.word] = {...answer}
+              answersObject[lemmatize.adjective(answer.word)] = {...answer}
+              answersObject[lemmatize.noun(answer.word)] = {...answer}
+              answersObject[lemmatize.verb(answer.word)] = {...answer}
+            })
+      
+            const answer = answersObject[cleanedInputText] || answersObject[lemmatize.adjective(cleanedInputText)] || answersObject[lemmatize.verb(cleanedInputText)] || answersObject[lemmatize.noun(cleanedInputText)] 
+      
+            if (!answer) {
+              setGuessCount(guessCount - 1)
+              setPlayWrongAnimation(true)
+            } else {
+              const clone = [...answers]
+              clone[answer.position] = {revealed: true, ...answer}
+              setAnswers(clone)
+            }
+
+            setInput("")
+          }
         }} className={`sm:w-1/5 ${wrongAnimation ? "animate-horizontal-shaking" : ""}`}></Input>
         <div className="flex flex-row gap-3">
           Misses:
