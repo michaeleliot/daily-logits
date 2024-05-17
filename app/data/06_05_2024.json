@@ -1,0 +1,1 @@
+{"question":" The printing machine whirred to life, spitting out _____ after _____ onto the waiting sheets of paper.","answers":[{"word":"one","logit":0.35,"position":0},{"word":"paper","logit":0.045,"position":1},{"word":"page","logit":0.038,"position":2},{"word":"day","logit":0.028,"position":3},{"word":"word","logit":0.022,"position":4}]}

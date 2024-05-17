@@ -1,0 +1,1 @@
+{"question":" The _____ pitcher threw a curveball that fooled the batter, resulting in a strike.","answers":[{"word":"opposing","logit":0.581,"position":0},{"word":"starting","logit":0.071,"position":1},{"word":"winning","logit":0.05,"position":2},{"word":"relief","logit":0.012,"position":3},{"word":"young","logit":0.01,"position":4}]}

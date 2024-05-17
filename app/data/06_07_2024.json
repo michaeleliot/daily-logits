@@ -1,0 +1,1 @@
+{"question":"At the farmers market, shoppers can find fresh _____ straight from the farm.","answers":[{"word":"produce","logit":0.626,"position":0},{"word":"goods","logit":0.085,"position":1},{"word":"products","logit":0.062,"position":2},{"word":"vegetables","logit":0.032,"position":3},{"word":"fruit","logit":0.028,"position":4}]}

@@ -1,0 +1,1 @@
+{"question":"The apple doesn't fall far from the _____.","answers":[{"word":"tree","logit":0.314,"position":0},{"word":"window","logit":0.045,"position":1},{"word":"sky","logit":0.031,"position":2},{"word":"table","logit":0.022,"position":3},{"word":"ceiling","logit":0.022,"position":4}]}

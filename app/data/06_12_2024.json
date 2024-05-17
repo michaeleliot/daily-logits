@@ -1,0 +1,1 @@
+{"question":" The golfer carefully lined up their shot, taking into account the wind and _____ of the green.","answers":[{"word":"temperature","logit":0.072,"position":0},{"word":"heat","logit":0.044,"position":1},{"word":"speed","logit":0.03,"position":2},{"word":"water","logit":0.025,"position":3},{"word":"darkness","logit":0.021,"position":4}]}

@@ -6,7 +6,12 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Daily Logits",
-  description: "A silly little daily AI guessing game",
+  description: "A daily AI guessing game",
+  openGraph: {
+    title: "Daily Logits",
+    description: "A daily AI guessing game! Can you guess what it's thinking???",
+    images: "https://daily-logits.vercel.app/marketing.jpg"
+  }
 };
 
 export default function RootLayout({

@@ -81,7 +81,7 @@ export default function Game({question, defaultAnswers}: {question: string, defa
           </button>
         </div>
         <div>{question}</div>
-        <Input ref={inputRef} value={input} disabled={loser || winner} onChange={(e) => setInput(e.target.value.replace(/[^a-zA-Z]/g, ''))} onKeyDown={(e) => {
+        <Input placeholder="type your guess here" ref={inputRef} value={input} disabled={loser || winner} onChange={(e) => setInput(e.target.value.replace(/[^a-zA-Z]/g, ''))} onKeyDown={(e) => {
           //@ts-ignore
           const inputText = e.target.value
           if (e.key === 'Enter' && inputText && inputRef.current) {

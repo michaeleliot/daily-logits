@@ -1,0 +1,1 @@
+{"question":"The Olympic athlete _____ across the finish line, winning the gold medal in the 100-meter dash.","answers":[{"word":"runs","logit":0.236,"position":0},{"word":"raced","logit":0.092,"position":1},{"word":"jumps","logit":0.076,"position":2},{"word":"sprint","logit":0.031,"position":3},{"word":"is","logit":0.019,"position":4}]}

@@ -22,8 +22,8 @@ export function DialogIntro({open, close}: {open: boolean, close: () => void}) {
         </div>
         <ul className="pl-10">
           <li className="list-disc">Only one word (no hyphens, punctuation, or spaces)</li>
-          <li className="list-disc">You have three incorrect answers before game over</li>
-          <li className="list-disc">Guess the 5 likeliest answers to win!</li>
+          <li className="list-disc">Three incorrect answers before game over</li>
+          <li className="list-disc">Guess 5 likeliest answers to win!</li>
           <li className="list-disc">Answers will show in order of logit, or likelihood score. Higher number = AI thinks more likely</li>
         </ul>
         <div>

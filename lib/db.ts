@@ -3,6 +3,7 @@ import { Answer } from './type';
 import { DataArray, pipeline } from '@xenova/transformers';
 import Replicate from "replicate";
 
+
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
 });
@@ -48,8 +49,16 @@ async function generateQuestion(topic: string) {
 
 function replaceMaskWithUnderscores(questionWithMask: string) {
   const splitQuestion = questionWithMask.split(" ")
-  const maskIndex = splitQuestion.findIndex(word => word == "[MASK]")
-  splitQuestion[maskIndex] = "_____"
+  const maskIndexes: number[] = []
+  splitQuestion.reduce(function(arr, word, i) {
+    if (word.includes("[MASK]")) maskIndexes.push(i);
+    return arr;
+  }, [])
+  maskIndexes.forEach(maskIndex => {
+    const word = splitQuestion[maskIndex]
+    const [before, after] = word.split("[MASK]")
+    splitQuestion[maskIndex] = before + "_____" + after
+  })
   return splitQuestion.join(" ")
 }
 
@@ -110,15 +119,13 @@ async function getTopic() {
   return topic
 }
 
-export async function generateGameForTomorrow() {
+export async function generateGameForDate(date: Date) {
   try {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const gameExists = await checkIfGameExists(tomorrow)
+    const gameExists = await checkIfGameExists(date)
     if (!gameExists) {
       const topic = await getTopic()
       const text = await generateQuestion(topic)
-      await createGameFromQuestion(text, tomorrow)
+      await createGameFromQuestion(text, date)
     } else {
       console.log("Game already exists")
     }
@@ -126,6 +133,14 @@ export async function generateGameForTomorrow() {
     console.log(e)
   }
 }
+
+export async function generateGameForTomorrow() {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  return generateGameForDate(tomorrow)
+}
+
+
 
 // async function similarity(foo: string, bar: string) {
 

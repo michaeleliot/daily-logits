@@ -1,0 +1,1 @@
+{"question":" The athlete trained tirelessly to improve their _____ in the high jump event.","answers":[{"word":"performance","logit":0.33,"position":0},{"word":"skills","logit":0.068,"position":1},{"word":"technique","logit":0.046,"position":2},{"word":"score","logit":0.026,"position":3},{"word":"position","logit":0.025,"position":4}]}
