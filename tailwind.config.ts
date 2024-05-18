@@ -95,11 +95,16 @@ const config = {
         "shrink": {
           from: {transform: "scale(1)"},
           to: {transform: "scale(0)"}
-        }
+        },
+        fadeIn: {
+          "0%": {opacity: "0"},
+          "100%": {opacity: "1"}
+        },
 
         
       },
       animation: {
+        "fadeIn" : "fadeIn ease forwards 0.3s",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "flip": "flip 500ms ease forwards",

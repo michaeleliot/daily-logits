@@ -22,7 +22,7 @@ export function DialogComplete({open, close, isWinner, answers}: {open: boolean,
     <Dialog open={open}>
       <DialogContent closeFn={close} className="flex flex-col items-center w-3/4 sm:max-w-[425px]">
         <div>
-          {score > total / 2 ? `Good Job! You got ${((score/total) * 100).toPrecision(2) + "%"}!` : "Better luck tomorrow!"}
+          {score > total / 2 ? `Good Job! You got ${((score/total) * 100).toPrecision(3) + "%"}!` : "Better luck tomorrow!"}
         </div>
         {
           <div>
@@ -32,7 +32,7 @@ export function DialogComplete({open, close, isWinner, answers}: {open: boolean,
         <DialogFooter  onClick={() => console.log("footer clicked")}>
           <Button onClick={() => {
             setIsCopied(true)
-            navigator.clipboard.writeText(emojiString)
+            navigator.clipboard.writeText("Daily Logits" + ` ${new Date().getMonth()}/${new Date().getDay()}: ` + emojiString)
           }} type="button" variant="secondary">
             <div className={`${isCopied ? "animate-vertical-shaking" : ""}`}>{isCopied ? "Copied to Clipboard!" : "Share Your Results"}</div>
           </Button>

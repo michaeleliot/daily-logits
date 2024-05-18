@@ -17,40 +17,59 @@ const lastPlayedDateKey = "lastPlayedDate"
 const defaultNumGuesses = 3
 
 export default function Game({question, defaultAnswers}: {question: string, defaultAnswers: Answer[]}) {
-  const [guessCount, setGuessCount] = useLocalStorage("guesses", defaultNumGuesses)
-  const [answers, setAnswers] = useLocalStorage("answers", defaultAnswers)
+  const [gameState, setGameState] = useLocalStorage("gameState", {answers: defaultAnswers, winner: false, loser: false, guessCount: defaultNumGuesses, alreadyPlayedToday: false, revealedAnswers: false, lastPlayedDateString: ""})
   const [showDialog, setShowDialog] = useState(false)
   const [showCompleteDialog, setShowCompleteDialog] = useState(false)
+  const [hasShownCompleteDialogue, setHasShowCompleteDialogue] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const loser = !guessCount
-  const winner = answers.filter(answer => answer.revealed).length === 5 && !loser
+
+  console.log(gameState)
+
+  useEffect(() => {  
+    if (gameState.loser || gameState.winner) {
+      setHasShowCompleteDialogue(true)
+      if (!gameState.revealedAnswers) {
+        let failures = 0
+        const answersWithFailures: Answer[] = gameState.answers.map(answer => {
+          if (!answer.revealed) {
+            return {...answer, failReveal: ++failures}
+          }
+          return answer
+        })
+        setGameState({...gameState, answers: answersWithFailures, revealedAnswers: true})
+        setTimeout(() => {
+          setShowCompleteDialog(true)
+          setGameState({...gameState, alreadyPlayedToday: true})
+        }, 3000)
+      } else if (!hasShownCompleteDialogue) {
+        setTimeout(() => {
+          setShowCompleteDialog(true)
+          setGameState({...gameState, alreadyPlayedToday: true})
+        }, 1000)
+      }
+    }
+  }, [gameState, hasShownCompleteDialogue, setGameState])
 
   useEffect(() => {
-    if (winner || loser) {
-      let failures = 0
-      const answersWithFailures: Answer[] = answers.map(answer => {
-        if (!answer.revealed) {
-          return {...answer, failReveal: ++failures}
-        }
-        return answer
-      })
-      setAnswers(answersWithFailures)
-      setTimeout(() => setShowCompleteDialog(true), 3000)
-    }
-  }, [winner, loser, setShowCompleteDialog])
-
-  useEffect(() => {
-    const lastPlayed = window.localStorage.getItem(lastPlayedDateKey);
-    if (!lastPlayed || getTimeDifference(new Date(new Date().toDateString())).days >= 7) {
-      setShowDialog(true)
-    }
-    if (!lastPlayed || lastPlayed != new Date().toDateString()) {
-      setGuessCount(defaultNumGuesses)
-      setAnswers(defaultAnswers)
-      window.localStorage.setItem(lastPlayedDateKey, new Date().toDateString())
+    if (!isLoading) {
+      if (!gameState.lastPlayedDateString || getTimeDifference(new Date(new Date().toDateString())).days >= 7) {
+        setShowDialog(true)
+      }
+      if (!gameState.lastPlayedDateString || gameState.lastPlayedDateString != new Date().toDateString()) {
+        setGameState({
+          ...gameState,
+          guessCount: defaultNumGuesses,
+          answers: defaultAnswers,
+          alreadyPlayedToday: false,
+          loser: false,
+          winner: false,
+          revealedAnswers: false,
+          lastPlayedDateString: new Date().toDateString()
+        })
+      }
     }
     setIsLoading(false)
-  }, [setGuessCount, setAnswers, answers, defaultAnswers]);
+  }, [gameState, setGameState, defaultAnswers, isLoading]);
 
 
   const checkAnswer = useCallback((inputText: string) => {
@@ -58,7 +77,7 @@ export default function Game({question, defaultAnswers}: {question: string, defa
     const lemmatize = require( 'wink-lemmatizer' );
 
     const answersObject: {[key: string]: Answer} = {}
-    answers.forEach((answer, i) => {
+    gameState.answers.forEach((answer, i) => {
       answersObject[answer.word] = {...answer}
       answersObject[lemmatize.adjective(answer.word)] = {...answer}
       answersObject[lemmatize.noun(answer.word)] = {...answer}
@@ -68,35 +87,37 @@ export default function Game({question, defaultAnswers}: {question: string, defa
     const answer = answersObject[cleanedInputText] || answersObject[lemmatize.adjective(cleanedInputText)] || answersObject[lemmatize.verb(cleanedInputText)] || answersObject[lemmatize.noun(cleanedInputText)] 
 
     if (!answer) {
-      setGuessCount(guessCount - 1)
+      const newGuessCount = gameState.guessCount - 1
+      setGameState({...gameState, guessCount: newGuessCount, loser: newGuessCount <= 0})
       return false
     } else {
-      const clone = [...answers]
+      const clone = [...gameState.answers]
       clone[answer.position] = {revealed: true, ...answer}
-      setAnswers(clone)
+      const isWinner = clone.filter(answer => answer.revealed).length == 5 && !gameState.loser
+      setGameState({...gameState, answers: clone, winner: isWinner})
       return true
     }
-  }, [answers, guessCount, setAnswers, setGuessCount])
+  }, [gameState, setGameState])
 
   return (
     <div className="w-full h-full flex flex-col gap-4 items-center">
       {
-        (winner || loser) && showCompleteDialog && <DialogComplete isWinner={winner} answers={answers} open={true} close={() => setShowCompleteDialog(false)}/>
+        (gameState.winner || gameState.loser) && showCompleteDialog && <DialogComplete isWinner={gameState.winner} answers={gameState.answers} open={true} close={() => setShowCompleteDialog(false)}/>
       }
       {
         isLoading ?
         <div>Loading...</div> :
-        <>
+        <div className="w-full h-full flex flex-col gap-4 items-center transition-all animate-fadeIn">
           <GameHeader showDialog={showDialog} setShowDialog={setShowDialog}/>
           <div>{question}</div>
-          <GuessInput checkAnswer={checkAnswer} disabled={loser || winner}/>
+          <GuessInput checkAnswer={checkAnswer} disabled={gameState.loser || gameState.winner}/>
           <div className="flex flex-row gap-3">
             {
-              Array.from(Array(defaultNumGuesses)).map((_, i) => <div className={`${i >= guessCount ? "animate-shrink fill-mode-forwards" : ""}`} key={i}>O</div>)
+              Array.from(Array(defaultNumGuesses)).map((_, i) => <div className={`${i >= gameState.guessCount ? "animate-shrink fill-mode-forwards" : ""}`} key={i}>O</div>)
             }
           </div>
-          <Answers answers={answers} />
-        </>
+          <Answers answers={gameState.answers} alreadyPlayed={!!gameState.alreadyPlayedToday} />
+        </div>
       }
     </div>
   );
