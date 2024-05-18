@@ -46,7 +46,7 @@ export default function Game({question, defaultAnswers}: {question: string, defa
     }
     if (!lastPlayed || lastPlayed != new Date().toDateString()) {
       setGuessCount(defaultNumGuesses)
-      setAnswers(answers)
+      setAnswers(defaultAnswers)
       window.localStorage.setItem(lastPlayedDateKey, new Date().toDateString())
     }
     setIsLoading(false)
