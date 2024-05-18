@@ -13,13 +13,16 @@ import { Answer } from "@/lib/type"
 import { useState } from "react"
 
 export function DialogComplete({open, close, isWinner, answers}: {open: boolean, close: () => void, isWinner: boolean, answers: Answer[]}) {
+  const score = answers.reduce((sum, answer) => sum + (answer.failReveal ? 0 : answer.logit), 0)
+  const total = answers.reduce((sum, answer) => sum + (answer.logit), 0)
   const emojiString = answers.map(answer => !answer.failReveal ? "🧠" : "🤖").join(" ")
+
   const [isCopied, setIsCopied] = useState(false)
   return (
     <Dialog open={open}>
       <DialogContent closeFn={close} className="flex flex-col items-center w-3/4 sm:max-w-[425px]">
         <div>
-          {isWinner ? "Good Job!" : "Better luck tomorrow!"}
+          {score > total / 2 ? `Good Job! You got ${((score/total) * 100).toPrecision(2) + "%"}!` : "Better luck tomorrow!"}
         </div>
         {
           <div>
