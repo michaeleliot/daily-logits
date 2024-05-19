@@ -1,18 +1,13 @@
 "use client"
 
 import Answers from "@/components/answers";
-import { Input } from "@/components/ui/input";
 import { Answer } from "@/lib/type";
 import useLocalStorage from "@/lib/useLocalStorage";
-import { Ref, RefObject, useCallback, useEffect, useRef, useState } from "react";
-import { DialogIntro } from "./dialog-intro";
+import { useCallback, useEffect, useState } from "react";
 import { DialogComplete } from "./dialog-complete";
 import GuessInput from "./guess-input";
 import GameHeader from "./game-header";
 import { getTimeDifference } from "@/lib/utils";
-import { pipeline } from "@xenova/transformers";
-
-const lastPlayedDateKey = "lastPlayedDate"
 
 const defaultNumGuesses = 3
 
@@ -22,8 +17,6 @@ export default function Game({question, defaultAnswers}: {question: string, defa
   const [showCompleteDialog, setShowCompleteDialog] = useState(false)
   const [hasShownCompleteDialogue, setHasShowCompleteDialogue] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-
-  console.log(gameState)
 
   useEffect(() => {  
     if (gameState.loser || gameState.winner) {

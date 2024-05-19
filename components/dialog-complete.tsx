@@ -29,7 +29,7 @@ export function DialogComplete({open, close, isWinner, answers}: {open: boolean,
             {emojiString}
           </div>
         }
-        <DialogFooter  onClick={() => console.log("footer clicked")}>
+        <DialogFooter>
           <Button onClick={() => {
             setIsCopied(true)
             navigator.clipboard.writeText("Daily Logits" + ` ${new Date().getMonth()}/${new Date().getDay()}: ` + emojiString)

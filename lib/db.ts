@@ -100,10 +100,8 @@ async function checkIfGameExists(date: Date) {
   try {
     const formattedDate = getFormattedDate(date)
     await fs.readFile(process.cwd() + `${VOLUME_PATH}/${formattedDate}.json`)
-    console.log("got here")
     return true
   } catch (e) {
-    console.log("false")
     return false
   }
 }
@@ -139,41 +137,3 @@ export async function generateGameForTomorrow() {
   tomorrow.setDate(tomorrow.getDate() + 1);
   return generateGameForDate(tomorrow)
 }
-
-
-
-// async function similarity(foo: string, bar: string) {
-
-//   const extractor = await pipeline('feature-extraction', 'Xenova/bert-base-uncased', { revision: 'default' });
-//   const foutput = await extractor(foo);
-//   const boutput = await extractor(bar);
-//   const sim = cosineSimilarity(foutput.data, boutput.data)
-//   return sim
-// }
-
-// function cosineSimilarity(vectorA: DataArray, vectorB: DataArray) {
-//   // Check if vectors have the same length
-//   if (vectorA.length !== vectorB.length) {
-//     throw new Error("Vectors must have the same length");
-//   }
-
-//   // Calculate dot product
-//   let dotProduct = 0;
-//   for (let i = 0; i < vectorA.length; i++) {
-//     dotProduct += vectorA[i] * vectorB[i];
-//   }
-
-//   // Calculate magnitude of each vector
-//   //@ts-ignore
-//   let magnitudeA = Math.sqrt(vectorA.reduce((acc, value) => acc + value * value, 0));
-//   //@ts-ignore
-//   let magnitudeB = Math.sqrt(vectorB.reduce((acc, value) => acc + value * value, 0));
-
-//   // Avoid division by zero
-//   if (magnitudeA === 0 || magnitudeB === 0) {
-//     return 0;
-//   }
-
-//   // Cosine similarity formula
-//   return dotProduct / (magnitudeA * magnitudeB);
-// }
