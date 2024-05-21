@@ -9,7 +9,7 @@ import GuessInput from "./guess-input";
 import GameHeader from "./game-header";
 import { getTimeDifference } from "@/lib/utils";
 
-const defaultNumGuesses = 3
+const defaultNumGuesses = 5
 
 export default function Game({question, defaultAnswers}: {question: string, defaultAnswers: Answer[]}) {
   const [gameState, setGameState] = useLocalStorage("gameState", {answers: defaultAnswers, winner: false, loser: false, guessCount: defaultNumGuesses, alreadyPlayedToday: false, revealedAnswers: false, lastPlayedDateString: ""})
@@ -18,8 +18,8 @@ export default function Game({question, defaultAnswers}: {question: string, defa
   const [hasShownCompleteDialogue, setHasShowCompleteDialogue] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {  
-    if (gameState.loser || gameState.winner) {
+  useEffect(() => {
+    if (!hasShownCompleteDialogue && (gameState.loser || gameState.winner) && gameState.lastPlayedDateString == new Date().toDateString()) {
       setHasShowCompleteDialogue(true)
       if (!gameState.revealedAnswers) {
         let failures = 0
@@ -32,7 +32,7 @@ export default function Game({question, defaultAnswers}: {question: string, defa
         setGameState({...gameState, answers: answersWithFailures, revealedAnswers: true})
         setTimeout(() => {
           setShowCompleteDialog(true)
-          setGameState({...gameState, alreadyPlayedToday: true})
+          setGameState({...gameState, answers: answersWithFailures, alreadyPlayedToday: true})
         }, 3000)
       } else if (!hasShownCompleteDialogue) {
         setTimeout(() => {
