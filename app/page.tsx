@@ -2,6 +2,7 @@ import Game from "@/components/game";
 import { getTodaysGame } from "@/lib/db";
 
 export const revalidate = 3600
+export const dynamic = 'force-dynamic'
 
 export default async function Home() {
   const {question, answers} = await getTodaysGame()

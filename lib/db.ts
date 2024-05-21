@@ -137,3 +137,4 @@ export async function generateGameForTomorrow() {
   tomorrow.setDate(tomorrow.getDate() + 1);
   return generateGameForDate(tomorrow)
 }
+
