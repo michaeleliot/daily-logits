@@ -12,7 +12,7 @@ import { getTimeDifference } from "@/lib/utils";
 const defaultNumGuesses = 5
 
 export default function Game({question, defaultAnswers}: {question: string, defaultAnswers: Answer[]}) {
-  const [gameState, setGameState] = useLocalStorage("gameState", {answers: defaultAnswers, winner: false, loser: false, guessCount: defaultNumGuesses, alreadyPlayedToday: false, revealedAnswers: false, lastPlayedDateString: ""})
+  const [gameState, setGameState] = useLocalStorage("gameState", {answers: defaultAnswers, winner: false, loser: false, guessCount: defaultNumGuesses, alreadyPlayedToday: false, lastPlayedDateString: ""})
   const [showDialog, setShowDialog] = useState(false)
   const [showCompleteDialog, setShowCompleteDialog] = useState(false)
   const [hasShownCompleteDialogue, setHasShowCompleteDialogue] = useState(false)
@@ -21,7 +21,7 @@ export default function Game({question, defaultAnswers}: {question: string, defa
   useEffect(() => {
     if (!hasShownCompleteDialogue && (gameState.loser || gameState.winner) && gameState.lastPlayedDateString == new Date().toDateString()) {
       setHasShowCompleteDialogue(true)
-      if (!gameState.revealedAnswers) {
+      if (!gameState.alreadyPlayedToday) {
         let failures = 0
         const answersWithFailures: Answer[] = gameState.answers.map(answer => {
           if (!answer.revealed) {
@@ -29,12 +29,12 @@ export default function Game({question, defaultAnswers}: {question: string, defa
           }
           return answer
         })
-        setGameState({...gameState, answers: answersWithFailures, revealedAnswers: true})
+        setGameState({...gameState, answers: answersWithFailures}) 
         setTimeout(() => {
           setShowCompleteDialog(true)
-          setGameState({...gameState, answers: answersWithFailures, alreadyPlayedToday: true})
+          setGameState({...gameState, answers: answersWithFailures, alreadyPlayedToday: true}) //We have to set update answers again because setTimeout has a snapshot of the state when it is set not when it is triggered. This could be reworked to not be the case, but this is fine for now.
         }, 3000)
-      } else if (!hasShownCompleteDialogue) {
+      } else {
         setTimeout(() => {
           setShowCompleteDialog(true)
           setGameState({...gameState, alreadyPlayedToday: true})
@@ -56,7 +56,6 @@ export default function Game({question, defaultAnswers}: {question: string, defa
           alreadyPlayedToday: false,
           loser: false,
           winner: false,
-          revealedAnswers: false,
           lastPlayedDateString: new Date().toDateString()
         })
       }
