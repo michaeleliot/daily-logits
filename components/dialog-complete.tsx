@@ -32,7 +32,7 @@ export function DialogComplete({open, close, isWinner, answers}: {open: boolean,
         <DialogFooter>
           <Button onClick={() => {
             setIsCopied(true)
-            navigator.clipboard.writeText("Daily Logits" + ` ${new Date().getMonth()}/${new Date().getDay()}: ` + emojiString)
+            navigator.clipboard.writeText("Daily Logits" + ` ${new Date().getMonth() + 1}/${new Date().getDate()}: ` + emojiString)
           }} type="button" variant="secondary">
             <div className={`${isCopied ? "animate-vertical-shaking" : ""}`}>{isCopied ? "Copied to Clipboard!" : "Share Your Results"}</div>
           </Button>
